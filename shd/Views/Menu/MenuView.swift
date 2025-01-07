@@ -9,14 +9,16 @@ import SwiftUI
 import Kingfisher
 
 struct MenuView: View {
-//    @StateObject var cartData = CartData()
     @ObservedObject var cartData: CartData
-//    @StateObject private var menuData = MenuData()
     @ObservedObject var menuData: MenuData
-//    @StateObject private var deliveryData = DeliveryData()
     @ObservedObject var deliveryData: DeliveryData
     @State private var selectedCategory: String? = "Холодные закуски"
     @State private var isRefreshing = false
+    
+    private let columns = [
+          GridItem(.flexible(), spacing: 16),
+          GridItem(.flexible(), spacing: 16)
+      ]
 
     var body: some View {
         let sortedCategories: [String] = {
@@ -101,7 +103,7 @@ struct MenuView: View {
                         
                         if let selectedCategory = selectedCategory,
                             let items = menuData.menuCategories[selectedCategory] {
-                            LazyVStack(alignment: .leading, spacing: 16) {
+                            LazyVGrid(columns: columns, spacing: 16) {
                                 ForEach(items) { item in
                                     MenuItemView(item: item, cartData: cartData, deliveryData: deliveryData)
                                 }

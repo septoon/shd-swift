@@ -33,14 +33,19 @@ final class TelegramService {
     ) {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ru")
-        formatter.dateFormat = "dd.MM.yyyy HH:mm"
+        formatter.dateFormat = "dd.MM HH:mm"
         let dateString = formatter.string(from: currentTime)
         
         let method = (orderIndex == 0) ? "Доставка" : "Самовывоз"
         
         let itemsText = cartItems.map { item in
             let totalItemPrice = item.price * Int(item.quantity)
-            return "\(item.quantity)x \(item.name) - \(Int(totalItemPrice))₽"
+            return if let gram = item.gram {
+                "\(item.name) | x \(gram * item.quantity) г."
+            } else {
+                "\(item.name) | x \(item.quantity) шт."
+            }
+            
         }
         .joined(separator: "\n")
         
@@ -53,11 +58,11 @@ final class TelegramService {
 
             *Общая сумма:* \(Int(totalPrice))₽
             
-            Дата и время: \(dateString)
             Адрес: \(address)
             Телефон: \(phoneNumber)
-            Оплата: \(paymentMethod.rawValue)
             Комментарий: \(comment)
+            Дата и время: \(dateString)
+            Оплата: \(paymentMethod.rawValue)
             """
         
         guard let escapedText = text.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else {

@@ -68,14 +68,21 @@ struct OrderView: View {
                         )
                         .padding(.vertical, 4)
                     }
-                    
                     if viewModel.orderIndex == 0 {
-                        Section(header: Text("Адрес")) {
-                            TextField("Введите адрес", text: $viewModel.address)
-                                .padding(.vertical, 5)
-                                .background(Color.clear)
-                                .border(Color.clear, width: 0)
+                    Section(header: Text("Адрес")) {
+                        TextField("Введите адрес", text: $viewModel.address)
+                            .padding(.vertical, 5)
+                            .background(Color.clear)
+                            .border(Color.clear, width: 0)
                         }
+                        
+                    } else {
+                        if let c = viewModel.contactsData.contact {
+                            Text("\(c.address)")
+                        } else {
+                            Text("ул, Парковая, 2")
+                        }
+                        
                     }
                     
                     Section(header: Text("Номер телефона")) {
@@ -114,50 +121,58 @@ struct OrderView: View {
                 .scrollContentBackground(.hidden)
             }
             if !isKeyboardActive {
-                Button(action: {
-                    viewModel.sendOrder()
-                }) {
-                    if viewModel.isLoading {
-                        HStack {
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                            Spacer()
-                            Text("Отправка...")
-                                .font(.callout).bold()
-                            Spacer()
+                VStack {
+                    Button(action: {
+                        viewModel.sendOrder()
+                    }) {
+                        if viewModel.isLoading {
+                            HStack {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                Spacer()
+                                Text("Отправка...")
+                                    .font(.callout).bold()
+                                Spacer()
+                            }
+                            .font(.callout).bold()
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .fill(Color("LightSlateGray"))
+                            )
+                            .foregroundColor(.white)
+                            .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 2)
+                        } else {
+                            HStack(alignment: .center) {
+                                if viewModel.orderIndex == 0 && viewModel.cartData.totalPrice < viewModel.deliveryData.delivery?.minDeliveryAmount ?? 0 {
+                                    Text("Минимальная сумма заказа \(viewModel.deliveryData.delivery?.minDeliveryAmount ?? 0) ₽")
+                                        .font(.caption)
+                                } else {
+                                    Text("Заказать:")
+                                    Spacer()
+                                    Text("\(viewModel.cartData.totalPrice) ₽")
+                                }
+                            }
+                            .font(.callout).bold()
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(
+                                RoundedRectangle(cornerRadius: 14)
+                                    .fill(viewModel.canSendOrder ? Color.main : Color("LightSlateGray"))
+                            )
+                            .foregroundColor(.white)
+                            .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 2)
                         }
-                        .font(.callout).bold()
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(
-                            RoundedRectangle(cornerRadius: 16)
-                                .fill(Color("LightSlateGray"))
-                        )
-                        .foregroundColor(.white)
-                        .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 2)
-                    } else {
-                        HStack(alignment: .center) {
-                            Text("Заказать:")
-                            Spacer()
-                            Text("\(viewModel.cartData.totalPrice) ₽")
-                        }
-                        .font(.callout).bold()
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(
-                            RoundedRectangle(cornerRadius: 16)
-                                .fill(viewModel.canSendOrder ? Color.main : Color("LightSlateGray"))
-                        )
-                        .foregroundColor(.white)
-                        .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 2)
                     }
+                    .disabled(!viewModel.canSendOrder || viewModel.isLoading)
+                    .padding(.horizontal, 16)
+                
+               
+                    PrivacyPolicyView(showWebView: $showWebView, baseURL: viewModel.baseURL)
+                        .padding(.bottom, 0)
                 }
-                .disabled(!viewModel.canSendOrder || viewModel.isLoading)
-                .padding(.horizontal, 16)
-            
-           
-                PrivacyPolicyView(showWebView: $showWebView, baseURL: viewModel.baseURL)
-                    .padding(.bottom, 0)
+                .background(.clear)
             }
         }
         .padding()
@@ -167,6 +182,9 @@ struct OrderView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color("DarkModeBg"))
         .environment(\.locale, Locale(identifier: "ru"))
+        .task {
+            await viewModel.contactsData.fetchContacts()
+        }
         .onAppear {
             NotificationCenter.default.addObserver(
                 forName: UIResponder.keyboardWillShowNotification,

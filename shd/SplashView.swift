@@ -25,7 +25,7 @@ struct SplashView: View {
                 AnimatedTitleView(title: title, color: .C_5, initialDelay: initialDelays[1],
                                   animationType: .spring(duration: 1))
             }
-            AnimatedTitleView(title: title, color: .main, initialDelay: initialDelays[0],
+            AnimatedTitleView(title: title, color: .mainSplash, initialDelay: initialDelays[0],
                               animationType: .spring(duration: 1))
         }
     }
