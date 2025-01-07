@@ -70,7 +70,7 @@ struct DeliveryDTO: Decodable {
 }
 
 final class DeliveryData: ObservableObject {
-    @Published var isLoading = false
+    @Published var isLoading: Bool = false
     @Published var errorMessage: String?
     @Published var delivery: DeliveryDTO?
 

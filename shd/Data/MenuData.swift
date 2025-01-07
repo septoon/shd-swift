@@ -11,7 +11,7 @@ import SwiftUI
 struct MenuItemDTO: Codable, Identifiable, Equatable {
     let id: Int
     let name: String
-    let price: Int
+    var price: Int
     let serving: String?
     let description: String?
     let options: String?

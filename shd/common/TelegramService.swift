@@ -39,7 +39,6 @@ final class TelegramService {
         let method = (orderIndex == 0) ? "Доставка" : "Самовывоз"
         
         let itemsText = cartItems.map { item in
-            let totalItemPrice = item.price * Int(item.quantity)
             return if let gram = item.gram {
                 "\(item.name) | x \(gram * item.quantity) г."
             } else {

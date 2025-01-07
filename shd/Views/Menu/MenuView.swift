@@ -31,10 +31,16 @@ struct MenuView: View {
                 orderedCategories.firstIndex(of: $0) ?? .max < orderedCategories.firstIndex(of: $1) ?? .max
             }
         }()
+        var isLoading: Bool {
+            menuData.isLoading || deliveryData.isLoading
+        }
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    if menuData.isLoading && deliveryData.isLoading {
+                    if isLoading {
+                        var isLoading: Bool {
+                            menuData.isLoading || deliveryData.isLoading
+                        }
                         ZStack {
                             Color("DarkModeBg")
                                 .ignoresSafeArea()
