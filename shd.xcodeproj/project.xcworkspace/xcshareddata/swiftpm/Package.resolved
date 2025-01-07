@@ -1,6 +1,33 @@
 {
-  "originHash" : "0a79f2009ea5ba6a9e7c2c6471d05458a7ac9a981d2fd7ab914f1eb741af1ea1",
+  "originHash" : "02a4f42cb0fe63a7b43a65bf9bb693601a62a530eb6ef84a05a166de6b2efa94",
   "pins" : [
+    {
+      "identity" : "input-mask-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/RedMadRobot/input-mask-ios",
+      "state" : {
+        "revision" : "b492f115cc8b3aeb1b6395b4c4157d6bba1fceab",
+        "version" : "7.3.2"
+      }
+    },
+    {
+      "identity" : "iphonenumberfield",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/MojtabaHs/iPhoneNumberField",
+      "state" : {
+        "revision" : "cd961621559393c5220c6c955690ecc52318e753",
+        "version" : "0.10.4"
+      }
+    },
+    {
+      "identity" : "kingfisher",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/onevcat/Kingfisher.git",
+      "state" : {
+        "revision" : "e6749919f9761d573d37a7d7e78b1b854c191d7f",
+        "version" : "8.1.3"
+      }
+    },
     {
       "identity" : "lottie-ios",
       "kind" : "remoteSourceControl",
@@ -8,6 +35,24 @@
       "state" : {
         "revision" : "fe4c6fe3a0aa66cdeb51d549623c82ca9704b9a5",
         "version" : "4.5.0"
+      }
+    },
+    {
+      "identity" : "maskedtextfieldswiftui",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/darealkhan/MaskedTextFieldSwiftUI.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "6a64abc742db9bcf1fcea5f5e89a7468c997bdbc"
+      }
+    },
+    {
+      "identity" : "phonenumberkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/marmelroy/PhoneNumberKit",
+      "state" : {
+        "revision" : "c107075aa8d394be7aced273a46e944afe8b321b",
+        "version" : "3.8.0"
       }
     }
   ],

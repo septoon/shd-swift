@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct MenuItemView: View {
     let item: MenuItemDTO
@@ -14,54 +15,52 @@ struct MenuItemView: View {
     @ObservedObject var deliveryData: DeliveryData
 
     var body: some View {
-        HStack {
+        VStack {
             if let imageUrl = item.image, let url = URL(string: imageUrl) {
-                AsyncImage(url: url) { phase in
-                    switch phase {
-                    case .empty:
+                KFImage(url)
+                    .placeholder {
                         ProgressView()
-                            .frame(width: 80, height: 80)
-                            .background(Color.gray.opacity(0.2))
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 160)
                             .cornerRadius(10)
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 80, height: 80)
-                            .cornerRadius(10)
-                    case .failure:
-                        Image(systemName: "photo")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 80, height: 80)
-                            .background(Color.gray.opacity(0.2))
-                            .cornerRadius(10)
-                    @unknown default:
-                        EmptyView()
                     }
-                }
+                    .resizable()
+                    .scaledToFill()
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 160)
+                    .clipped()
+                    .cornerRadius(10)
             }
 
             // Текстовые данные блюда
             VStack(alignment: .leading, spacing: 8) {
                 Text(item.name)
                     .font(.headline)
-                if let description = item.description {
-                    Text(description)
+                if item.gram != nil {
+                    Text(item.options ?? "")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                        .lineLimit(2)
+                    Text("Приблизительный вес: \(item.weight ?? 0)г.")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                        .lineLimit(2)
+                } else if item.serving != nil {
+                    Text("Количество: \( item.serving ?? "")")
                         .font(.subheadline)
                         .foregroundColor(.gray)
                         .lineLimit(2)
                 }
-                HStack {
+                HStack(alignment: .bottom) {
                     if deliveryData.delivery?.promotion == true {
-                                        VStack {
+                        VStack(alignment: .leading) {
                                             Text("\(item.price) ₽")
                                                 .strikethrough()
                                                 .font(.footnote)
                                                 .fontWeight(.light)
                                                 .foregroundColor(.gray)
                                             Text("\(item.price - deliveryData.delivery!.promotionCount) ₽")
-                                                .font(.subheadline)
+                                                .font(.title3)
                                                 .fontWeight(.bold)
                                                 .foregroundColor(AppColors.main)
                                         }
@@ -139,7 +138,7 @@ struct MenuItemView: View {
                 
                 
             }
-            .padding(.leading, 8)
+            .padding(.leading, 2)
         }
         .padding()
         .background(Color("DarkModeElBg"))

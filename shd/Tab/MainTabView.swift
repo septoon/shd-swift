@@ -36,7 +36,7 @@ struct MainTabView: View {
                     
             }
             NavigationView {
-                CartView(cartData: cartData)
+                CartView(cartData: cartData, deliveryData: deliveryData, contactsData: contactsData)
             }
             .tabItem {
                 Label("Корзина", systemImage: "cart.circle")

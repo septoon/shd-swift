@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct DeliveryView: View {
-//    @StateObject private var deliveryData = DeliveryData()
     @ObservedObject var deliveryData: DeliveryData
     
     var body: some View {
@@ -16,8 +15,15 @@ struct DeliveryView: View {
             ScrollView {
                 // Если идёт загрузка
                 if deliveryData.isLoading {
-                    ProgressView("Загрузка...")
-                        .padding()
+                    ZStack {
+                        Color("DarkModeBg")
+                            .ignoresSafeArea()
+
+                        PreLoader(animationName: "Preloader")
+                            .frame(width: 100, height: 100)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .contentShape(Rectangle())
                         
                 // Если есть ошибка
                 } else if let error = deliveryData.errorMessage {
@@ -60,14 +66,14 @@ struct DeliveryView: View {
                                 .font(.callout)
                                 .fontWeight(.semibold)
                         }
-                        .padding()
+                        .padding(.vertical, 10)
                         .frame(maxWidth: .infinity)
                         .background(Color("DarkModeElBg"))
                         .cornerRadius(12)
                         
                         // Блок со скидкой
                         if d.promotion {
-                            VStack(alignment: .leading, spacing: 8) {
+                            VStack(alignment: .leading) {
                                 Text("СКИДКА \(d.promotionCount)%")
                                     .font(.title)
                                     .fontWeight(.heavy)
@@ -76,7 +82,7 @@ struct DeliveryView: View {
                                     .font(.callout)
                                     .fontWeight(.semibold)
                             }
-                            .padding()
+                            .padding(.vertical, 16)
                             .frame(maxWidth: .infinity)
                             .background(Color("DarkModeElBg"))
                             .cornerRadius(12)
@@ -130,8 +136,15 @@ struct DeliveryView: View {
                     .padding([.leading, .trailing], 8)
                     
                 } else {
-                    Text("Нет данных")
-                        .padding()
+                    ZStack {
+                        Color("DarkModeBg")
+                            .ignoresSafeArea()
+
+                        PreLoader(animationName: "Preloader")
+                            .frame(width: 100, height: 100)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .contentShape(Rectangle())
                 }
             }
             .background(Color("DarkModeBg"))
@@ -144,4 +157,8 @@ struct DeliveryView: View {
         }
 
     }
+}
+
+#Preview {
+    DeliveryView(deliveryData: DeliveryData())
 }

@@ -8,11 +8,9 @@
 import SwiftUI
 
 struct ContactsView: View {
-//    @StateObject private var contactsData = ContactsData()
     @ObservedObject var contactsData: ContactsData
     
     func callPhoneNumber(_ phoneNumber: String) {
-        // Удаляем все пробелы и лишние символы из номера телефона
         let cleanedPhoneNumber = phoneNumber.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "-", with: "")
         if let phoneURL = URL(string: "tel://\(cleanedPhoneNumber)"),
            UIApplication.shared.canOpenURL(phoneURL) {
@@ -95,8 +93,15 @@ struct ContactsView: View {
                             Text("Ошибка: \(contactsData.errorMessage!)")
                                 .foregroundColor(.red)
                         } else {
-                            Text("Нет данных")
-                                .padding()
+                            ZStack {
+                                Color("DarkModeBg")
+                                    .ignoresSafeArea()
+
+                                PreLoader(animationName: "Preloader")
+                                    .frame(width: 100, height: 100)
+                            }
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .contentShape(Rectangle())
                         }
                     }
                 }

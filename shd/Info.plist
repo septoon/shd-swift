@@ -4,6 +4,10 @@
 <dict>
 	<key></key>
 	<string></string>
+	<key>API_BASE_URL</key>
+	<string>https://api.shashlichny-dom.ru</string>
+	<key>BASE_URL</key>
+	<string>https://shashlichny-dom.ru</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -12,12 +16,14 @@
 		</dict>
 		<dict/>
 	</array>
+	<key>CHAT_ID</key>
+	<string>-1002176676370</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-    <key>API_BASE_URL</key>
-    <string>https://api.shashlichny-dom.ru</string>
+	<key>TELEGRAM_BOT_TOKEN</key>
+	<string>7275423419:AAGDxY6uqtmMxO3xFzKbMKRhxyfr9W9RjHY</string>
 </dict>
 </plist>

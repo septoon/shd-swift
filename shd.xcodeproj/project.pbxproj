@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		B52338B72D2188FA0010D885 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = B52338B62D2188FA0010D885 /* Lottie */; };
+		B5DD90C92D2AB020009501C7 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = B5DD90C82D2AB020009501C7 /* Kingfisher */; };
+		B5DD90E42D2CDF88009501C7 /* InputMask in Frameworks */ = {isa = PBXBuildFile; productRef = B5DD90E32D2CDF88009501C7 /* InputMask */; };
+		B5DD90E72D2D2BC6009501C7 /* MaskedTextFieldSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = B5DD90E62D2D2BC6009501C7 /* MaskedTextFieldSwiftUI */; };
+		B5DD90EA2D2D4B2E009501C7 /* iPhoneNumberField in Frameworks */ = {isa = PBXBuildFile; productRef = B5DD90E92D2D4B2E009501C7 /* iPhoneNumberField */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,7 +73,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B5DD90E42D2CDF88009501C7 /* InputMask in Frameworks */,
+				B5DD90C92D2AB020009501C7 /* Kingfisher in Frameworks */,
 				B52338B72D2188FA0010D885 /* Lottie in Frameworks */,
+				B5DD90EA2D2D4B2E009501C7 /* iPhoneNumberField in Frameworks */,
+				B5DD90E72D2D2BC6009501C7 /* MaskedTextFieldSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,6 +147,10 @@
 			name = shd;
 			packageProductDependencies = (
 				B52338B62D2188FA0010D885 /* Lottie */,
+				B5DD90C82D2AB020009501C7 /* Kingfisher */,
+				B5DD90E32D2CDF88009501C7 /* InputMask */,
+				B5DD90E62D2D2BC6009501C7 /* MaskedTextFieldSwiftUI */,
+				B5DD90E92D2D4B2E009501C7 /* iPhoneNumberField */,
 			);
 			productName = shd;
 			productReference = B531E87E2D1EFC51001CF0DD /* shd.app */;
@@ -224,6 +236,10 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				B52338AE2D2184450010D885 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				B5DD90C72D2AAF3E009501C7 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				B5DD90E22D2CDF88009501C7 /* XCRemoteSwiftPackageReference "input-mask-ios" */,
+				B5DD90E52D2D2BC6009501C7 /* XCRemoteSwiftPackageReference "MaskedTextFieldSwiftUI" */,
+				B5DD90E82D2D4B2E009501C7 /* XCRemoteSwiftPackageReference "iPhoneNumberField" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B531E87F2D1EFC51001CF0DD /* Products */;
@@ -610,6 +626,38 @@
 				minimumVersion = 4.5.0;
 			};
 		};
+		B5DD90C72D2AAF3E009501C7 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.1.3;
+			};
+		};
+		B5DD90E22D2CDF88009501C7 /* XCRemoteSwiftPackageReference "input-mask-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RedMadRobot/input-mask-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.3.2;
+			};
+		};
+		B5DD90E52D2D2BC6009501C7 /* XCRemoteSwiftPackageReference "MaskedTextFieldSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/darealkhan/MaskedTextFieldSwiftUI.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		B5DD90E82D2D4B2E009501C7 /* XCRemoteSwiftPackageReference "iPhoneNumberField" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MojtabaHs/iPhoneNumberField";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.10.4;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -617,6 +665,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B52338AE2D2184450010D885 /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
+		};
+		B5DD90C82D2AB020009501C7 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B5DD90C72D2AAF3E009501C7 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		B5DD90E32D2CDF88009501C7 /* InputMask */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B5DD90E22D2CDF88009501C7 /* XCRemoteSwiftPackageReference "input-mask-ios" */;
+			productName = InputMask;
+		};
+		B5DD90E62D2D2BC6009501C7 /* MaskedTextFieldSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B5DD90E52D2D2BC6009501C7 /* XCRemoteSwiftPackageReference "MaskedTextFieldSwiftUI" */;
+			productName = MaskedTextFieldSwiftUI;
+		};
+		B5DD90E92D2D4B2E009501C7 /* iPhoneNumberField */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B5DD90E82D2D4B2E009501C7 /* XCRemoteSwiftPackageReference "iPhoneNumberField" */;
+			productName = iPhoneNumberField;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -9,34 +9,48 @@ import SwiftUI
 
 struct CartView: View {
     @ObservedObject var cartData: CartData
+    @ObservedObject var deliveryData: DeliveryData
+    @ObservedObject var contactsData: ContactsData
+    
     @State var showBottomSheet = false
 
     var body: some View {
         NavigationStack {
             ZStack(alignment: .bottom) {
-                ScrollView {
                     if cartData.items.isEmpty {
-                        Image("empty-cart")
-                            .padding(.top, 60)
-                        Text("Вероятно, вы еще ничего не заказали.")
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .font(.body)
-                            .padding(.top, 20)
-                        Text("Перейдите в меню для заказа.")
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .font(.body)
-                    } else {
                         VStack {
-                            VStack(alignment: .leading) {
-                                ForEach(cartData.items, id: \.id) { item in
-                                    CartItemRow(item: item, cartData: cartData)
-                                        .padding(.horizontal, 10)
-                                }
-                            }
+                            Image("empty-cart")
+                            Text("Вероятно, вы еще ничего не заказали.")
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .font(.body)
+                                .padding(.top, 20)
+                            Text("Перейдите в меню для заказа.")
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .font(.body)
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    } else {
+                        VStack {
+                            List {
+                                Section(header: Text("Ваш заказ")) {
+                                    ForEach(cartData.items, id: \.id) { item in
+                                        CartItemRow(item: item, cartData: cartData)
+                                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                                Button(role: .destructive) {
+                                                    cartData.deleteAllItems(item)
+                                                } label: {
+                                                    Text("Удалить")
+                                                }
+                                            }
+                                    }
+                                }
+                            }
+                            .scrollContentBackground(.hidden)
+                        }
+                        .padding(.bottom, 50)
+                        .background(Color("DarkModeBg").ignoresSafeArea())
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
-                }
                 if !cartData.items.isEmpty {
                     Button(action: {
                         showBottomSheet.toggle()
@@ -60,18 +74,17 @@ struct CartView: View {
                                 }
                                 .padding(.horizontal, 16)
                     .sheet(isPresented: $showBottomSheet) {
-                        OrderView(cartData: cartData)
+                        OrderView(deliveryData: deliveryData, contactsData: contactsData, cartData: cartData)
                             .presentationDragIndicator(.visible)
                     }
                 }
             }
             .background(Color("DarkModeBg").ignoresSafeArea())
             .navigationTitle("Корзина")
-            .navigationBarTitleDisplayMode(.large)
         }
     }
 }
 
 #Preview {
-    CartView(cartData: CartData())
+    CartView(cartData: CartData(), deliveryData: DeliveryData(), contactsData: ContactsData())
 }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct MenuView: View {
 //    @StateObject var cartData = CartData()
@@ -18,10 +19,16 @@ struct MenuView: View {
     @State private var isRefreshing = false
 
     var body: some View {
-        let orderedCategories = ["Холодные закуски", "Горячие закуски", "Салаты", "Паста", "Гарниры", "Порционный шашлык", "Блюда на мангале", "Соусы", "Хлеб", "Напитки", "Десерты"]
-        let sortedCategories = Array(menuData.menuCategories.keys).sorted {
-            orderedCategories.firstIndex(of: $0) ?? .max < orderedCategories.firstIndex(of: $1) ?? .max
-        }
+        let sortedCategories: [String] = {
+            let orderedCategories = [
+                "Холодные закуски", "Горячие закуски", "Салаты",
+                "Паста", "Гарниры", "Порционный шашлык",
+                "Блюда на мангале", "Соусы", "Хлеб", "Напитки", "Десерты"
+            ]
+            return Array(menuData.menuCategories.keys).sorted {
+                orderedCategories.firstIndex(of: $0) ?? .max < orderedCategories.firstIndex(of: $1) ?? .max
+            }
+        }()
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
@@ -30,10 +37,11 @@ struct MenuView: View {
                             Color("DarkModeBg")
                                 .ignoresSafeArea()
 
-                            ProgressView("Загрузка меню...")
-                                .progressViewStyle(CircularProgressViewStyle(tint: AppColors.main))
+                            PreLoader(animationName: "Preloader")
+                                .frame(width: 100, height: 100)
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .contentShape(Rectangle())
                     } else if let errorMessage = menuData.errorMessage {
                         VStack {
                             Text(errorMessage)
@@ -61,35 +69,19 @@ struct MenuView: View {
                                         VStack(alignment: .leading, spacing: 8) {
                                             VStack {
                                                 if let firstItem = menuData.menuCategories[category]?.first, let imageUrl = firstItem.image, let url = URL(string: imageUrl) {
-                                                        AsyncImage(url: url) { phase in
-                                                            switch phase {
-                                                            case .empty:
-                                                                ProgressView()
-                                                                    .frame(width: 70, height: 70)
-                                                                    .background(Color("DarkModeElBg"))
-                                                                    .clipShape(Circle())
-                                                                    .padding()
-                                                            case .success(let image):
-                                                                image
-                                                                    .resizable()
-                                                                    .scaledToFill()
-                                                                    .frame(width: 70, height: 70)
-                                                                    .clipShape(Circle())
-                                                                    .padding()
-                                                            case .failure:
-                                                                Image(systemName: "photo")
-                                                                    .resizable()
-                                                                    .scaledToFit()
-                                                                    .frame(width: 70, height: 70)
-                                                                    .background(Color("DarkModeElBg"))
-                                                                    .clipShape(Circle())
-                                                                    .padding()
-                                                            @unknown default:
-                                                                EmptyView()
-                                                            }
+                                                    KFImage(url)
+                                                        .placeholder {
+                                                            ProgressView()
+                                                                .frame(width: 70, height: 70)
+                                                                .background(Color("DarkModeElBg"))
+                                                                .clipShape(Circle())
                                                         }
+                                                        .resizable()
+                                                        .scaledToFill()
+                                                        .frame(width: 70, height: 70)
+                                                        .clipShape(Circle())
                                                         .padding()
-                                                    }
+                                                }
                                             }
                                             .frame(width: 80, height: 80)
                                             .background(selectedCategory == category ? AppColors.main : Color("DarkModeElBg"))
@@ -133,9 +125,6 @@ struct MenuView: View {
     }
 }
 
-
-struct MenuView_Previews: PreviewProvider {
-    static var previews: some View {
-        MenuView(cartData: CartData(), menuData: MenuData(), deliveryData: DeliveryData())
-    }
+#Preview {
+    MenuView(cartData: CartData(), menuData: MenuData(), deliveryData: DeliveryData())
 }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct CartItemRow: View {
     let item: MenuItemDTO
@@ -14,35 +15,33 @@ struct CartItemRow: View {
     var body: some View {
         HStack {
             if let imageUrl = item.image, let url = URL(string: imageUrl) {
-                AsyncImage(url: url) { phase in
-                    switch phase {
-                    case .empty:
+                KFImage(url)
+                    .placeholder {
                         ProgressView()
-                            .frame(width: 50, height: 30)
+                            .frame(width: 50, height: 40)
                             .background(Color.gray.opacity(0.2))
                             .cornerRadius(5)
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 50, height: 30)
-                            .cornerRadius(5)
-                    case .failure:
-                        Image(systemName: "photo")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 50, height: 30)
-                            .background(Color.gray.opacity(0.2))
-                            .cornerRadius(5)
-                    @unknown default:
-                        EmptyView()
                     }
-                }
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 50, height: 40)
+                    .cornerRadius(5)
             }
 
-            Text(item.name)
-                .font(.caption2).bold()
-                .frame(alignment: .leading)
+            VStack(alignment: .leading) {
+                Text(item.name)
+                    .font(.caption2).bold()
+
+                if let gram = item.gram {
+                    Text("\(gram) г")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                } else {
+                    Text("\(item.serving ?? "")")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
+            }
 
             Spacer()
 
@@ -50,12 +49,12 @@ struct CartItemRow: View {
                 Button(action: {
                     cartData.removeFromCart(item)
                 }) {
-                    Image(systemName: "minus.circle")
-                        .foregroundColor(.red)
+                    Image(systemName: "minus")
+                        .foregroundColor(.main)
                 }
-                
-                if item.gram != nil {
-                    Text("\((item.gram ?? 0) * item.quantity)")
+                .buttonStyle(PlainButtonStyle())
+                if let gram = item.gram {
+                    Text("\(gram * item.quantity) г")
                         .font(.caption2)
                         .padding(.horizontal, 5)
                 } else {
@@ -63,22 +62,18 @@ struct CartItemRow: View {
                         .font(.caption2)
                         .padding(.horizontal, 5)
                 }
-                
                 Button(action: {
                     cartData.addToCart(item)
                 }) {
-                    Image(systemName: "plus.circle")
-                        .foregroundColor(.green)
+                    Image(systemName: "plus")
+                        .foregroundColor(.main)
                 }
-                Text("\(item.price * item.quantity) ₽")
-                    .font(.caption2)
-                    .padding(.horizontal)
+                .buttonStyle(PlainButtonStyle())
             }
+
+            Text("\(item.price * item.quantity) ₽")
+                .font(.caption2).bold()
         }
-        .padding(.vertical, 10)
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color("DarkModeElBg"))
-        )
+        .padding(.vertical, 6)
     }
 }

@@ -29,6 +29,14 @@ final class CartData: ObservableObject {
             }
         }
     }
+    
+    func deleteAllItems(_ item: MenuItemDTO) {
+            items.removeAll(where: { $0.id == item.id })
+        }
+    
+    func clearCart() {
+        items.removeAll()
+    }
 
     var totalPrice: Int {
         items.reduce(0) { $0 + ($1.price * $1.quantity) }
