@@ -27,14 +27,13 @@ struct CartItemRow: View {
                     .frame(width: 50, height: 40)
                     .cornerRadius(5)
             }
-
             VStack(alignment: .leading) {
                 Text(item.name)
                     .font(.caption2).bold()
 
                 if let gram = item.gram {
                     Text("\(gram) г")
-                        .font(.caption2)
+                        .font(.system(size: 8))
                         .foregroundColor(.secondary)
                 } else {
                     Text("\(item.serving ?? "")")
@@ -42,8 +41,8 @@ struct CartItemRow: View {
                         .foregroundColor(.secondary)
                 }
             }
-
-            Spacer()
+            .frame(maxWidth: 220, alignment: .leading)
+            Spacer(minLength: 30)
 
             HStack {
                 Button(action: {
@@ -70,9 +69,12 @@ struct CartItemRow: View {
                 }
                 .buttonStyle(PlainButtonStyle())
             }
+            
+            Spacer()
 
             Text("\(item.price * item.quantity) ₽")
                 .font(.caption2).bold()
+                .frame(maxWidth: 70, alignment: .trailing)
         }
         .padding(.vertical, 6)
     }

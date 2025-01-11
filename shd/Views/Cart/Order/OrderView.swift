@@ -40,23 +40,28 @@ struct OrderView: View {
                                 ? "\(item.quantity)"
                                 : "\(grams * item.quantity)"
                             
-                            let totalPrice = item.price * item.quantity
+                            let totalItemPrice = item.price * item.quantity
                             
                             HStack {
                                 Text(item.name)
                                     .font(.caption2).bold()
-                                
-                                Spacer()
+                                    .frame(maxWidth: 150, alignment: .leading)
+                                Spacer(minLength: 50)
                                 
                                 Text(gramsText)
                                     .font(.caption2)
                                 
                                 Spacer()
                                 
-                                Text("\(totalPrice) ₽")
+                                Text("\(totalItemPrice) ₽")
                                     .font(.caption2)
+                                    .frame(maxWidth: 100, alignment: .trailing)
                             }
                         }
+                    }
+                    
+                    if viewModel.paid && viewModel.totalPrice > viewModel.minAmount {
+                        Text("Стоимость доставки \(viewModel.deliveryCost)")
                     }
                     
                     Section(header: Text("Дата и время")) {
@@ -145,13 +150,17 @@ struct OrderView: View {
                             .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 2)
                         } else {
                             HStack(alignment: .center) {
-                                if viewModel.orderIndex == 0 && viewModel.cartData.totalPrice < viewModel.deliveryData.delivery?.minDeliveryAmount ?? 0 {
-                                    Text("Минимальная сумма заказа \(viewModel.deliveryData.delivery?.minDeliveryAmount ?? 0) ₽")
+                                if viewModel.orderIndex == 0 && !viewModel.paid && viewModel.totalPrice < viewModel.minAmount {
+                                    Text("Минимальная сумма заказа \(viewModel.minAmount) ₽")
                                         .font(.caption)
                                 } else {
                                     Text("Заказать:")
                                     Spacer()
-                                    Text("\(viewModel.cartData.totalPrice) ₽")
+                                    if viewModel.orderIndex == 0 && viewModel.paid && viewModel.totalPrice < viewModel.minAmount {
+                                        Text("\(viewModel.totalPrice + viewModel.deliveryCost) ₽")
+                                    } else {
+                                        Text("\(viewModel.totalPrice) ₽")
+                                    }
                                 }
                             }
                             .font(.callout).bold()

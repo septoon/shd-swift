@@ -9,7 +9,7 @@ import SwiftUI
 
 enum PaymentMethod: String, CaseIterable, Identifiable {
     case cash = "Наличные"
-    case card = "Карта"
+    case card = "Банковская карта"
 
     var id: String { self.rawValue }
 }
@@ -39,6 +39,23 @@ class OrderViewModel: ObservableObject {
         self.deliveryData = deliveryData
         self.contactsData = contactsData
         self.cartData = cartData
+    }
+    
+    
+    var paid: Bool {
+       return deliveryData.delivery?.paidDelivery ?? false
+    }
+    
+    var deliveryCost: Int {
+        return deliveryData.delivery?.deliveryCost ?? 0
+    }
+    
+    var minAmount: Int {
+        return deliveryData.delivery?.minDeliveryAmount ?? 0
+    }
+    
+    var totalPrice: Int {
+        return cartData.totalPrice
     }
     
     var isTimeValid: Bool {

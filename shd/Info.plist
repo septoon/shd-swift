@@ -25,5 +25,7 @@
 	</dict>
 	<key>TELEGRAM_BOT_TOKEN</key>
 	<string>7275423419:AAGDxY6uqtmMxO3xFzKbMKRhxyfr9W9RjHY</string>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>ru</string>
 </dict>
 </plist>

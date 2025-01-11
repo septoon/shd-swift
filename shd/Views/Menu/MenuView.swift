@@ -14,6 +14,8 @@ struct MenuView: View {
     @ObservedObject var deliveryData: DeliveryData
     @State private var selectedCategory: String? = "Холодные закуски"
     @State private var isRefreshing = false
+    @State private var searchText: String = ""
+    @State private var isSearching: Bool = false
     
     private let columns = [
           GridItem(.flexible(), spacing: 16),
@@ -31,9 +33,29 @@ struct MenuView: View {
                 orderedCategories.firstIndex(of: $0) ?? .max < orderedCategories.firstIndex(of: $1) ?? .max
             }
         }()
+        
+        
+        let allItems: [MenuItemDTO] = {
+            return menuData.menuCategories.values.flatMap { $0 }
+        }()
+
+        let filteredItems: [MenuItemDTO] = {
+            if !searchText.isEmpty {
+                // Поиск по всему меню
+                return allItems.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+            } else if let selectedCategory = selectedCategory {
+                // Фильтрация по выбранной категории
+                return menuData.menuCategories[selectedCategory] ?? []
+            } else {
+                return []
+            }
+        }()
+
+           
         var isLoading: Bool {
             menuData.isLoading || deliveryData.isLoading
         }
+        
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
@@ -68,60 +90,81 @@ struct MenuView: View {
                         }
                     } else {
 
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 16) {
-                                ForEach(sortedCategories, id: \.self) { category in
-                                    Button(action: {
-                                        selectedCategory = category
-                                    }) {
-                                        VStack(alignment: .leading, spacing: 8) {
-                                            VStack {
-                                                if let firstItem = menuData.menuCategories[category]?.first, let imageUrl = firstItem.image, let url = URL(string: imageUrl) {
-                                                    KFImage(url)
-                                                        .placeholder {
-                                                            ProgressView()
+                        if searchText.isEmpty {
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 16) {
+                                    ForEach(sortedCategories, id: \.self) { category in
+                                        Button(action: {
+                                            selectedCategory = category
+                                        }) {
+                                            VStack(alignment: .leading, spacing: 8) {
+                                                ZStack {
+                                                    VStack {
+                                                        if let firstItem = menuData.menuCategories[category]?.first, let imageUrl = firstItem.image, let url = URL(string: imageUrl) {
+                                                            KFImage(url)
+                                                                .placeholder {
+                                                                    ProgressView()
+                                                                        .frame(width: 70, height: 70)
+                                                                        .background(Color("DarkModeElBg"))
+                                                                        .clipShape(Circle())
+                                                                }
+                                                                .resizable()
+                                                                .scaledToFill()
                                                                 .frame(width: 70, height: 70)
-                                                                .background(Color("DarkModeElBg"))
                                                                 .clipShape(Circle())
+                                                                .padding()
                                                         }
-                                                        .resizable()
-                                                        .scaledToFill()
-                                                        .frame(width: 70, height: 70)
-                                                        .clipShape(Circle())
-                                                        .padding()
+                                                    }
+                                                    .frame(width: 80, height: 80)
+                                                    .background(selectedCategory == category ? AppColors.main : Color("DarkModeElBg"))
+                                                    .clipShape(Circle())
                                                 }
+                                                Spacer()
+                                                Text(category)
+                                                    .frame(maxWidth: .infinity)
+                                                    .font(.footnote).bold()
+                                                    .foregroundColor(selectedCategory == category ? Color("DarkModeIcon") : AppColors.main)
                                             }
-                                            .frame(width: 80, height: 80)
-                                            .background(selectedCategory == category ? AppColors.main : Color("DarkModeElBg"))
-                                            .clipShape(Circle())
-                                            Spacer()
-                                            Text(category)
-                                                .frame(maxWidth: .infinity)
-                                                .font(.footnote).bold()
-                                                .foregroundColor(selectedCategory == category ? Color("DarkModeIcon") : AppColors.main)
+                                            .frame(width: 80, height: 130, alignment: .top)
                                         }
-                                        .frame(width: 80, height: 130, alignment: .top)
                                     }
                                 }
+                                .padding()
                             }
-                            .padding()
+                            
+                            if let selectedCategory = selectedCategory,
+                                let items = menuData.menuCategories[selectedCategory] {
+                                LazyVGrid(columns: columns, spacing: 16) {
+                                    ForEach(items) { item in
+                                        MenuItemView(item: item, cartData: cartData, deliveryData: deliveryData)
+                                    }
+                                }
+                                .padding()
+                            }
                         }
                         
-                        if let selectedCategory = selectedCategory,
-                            let items = menuData.menuCategories[selectedCategory] {
+                        if !filteredItems.isEmpty {
                             LazyVGrid(columns: columns, spacing: 16) {
-                                ForEach(items) { item in
+                                ForEach(filteredItems) { item in
                                     MenuItemView(item: item, cartData: cartData, deliveryData: deliveryData)
                                 }
                             }
                             .padding()
+                        } else {
+                            Text("Ничего не найдено")
+                                .font(.headline)
+                                .foregroundColor(.secondary)
+                                .padding()
                         }
+                        
                     }
                 }
             }
             .background(Color("DarkModeBg"))
             .navigationTitle("Меню")
             .navigationBarTitleDisplayMode(.large)
+            .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
+            .environment(\.locale, Locale(identifier: "ru"))
             .refreshable {
                 await menuData.fetchMenuItems()
             }

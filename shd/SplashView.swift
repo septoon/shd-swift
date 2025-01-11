@@ -13,6 +13,7 @@ struct SplashView: View {
     private var initialDelays = [0.0, 0.04, 0.012, 0.18, 0.28, 0.35]
     var body : some View {
         ZStack {
+            Color(.main).ignoresSafeArea(.all)
             ZStack {
                 AnimatedTitleView(title: title, color: .C_1, initialDelay: initialDelays[5],
                                   animationType: .spring(duration: 1))
@@ -25,7 +26,7 @@ struct SplashView: View {
                 AnimatedTitleView(title: title, color: .C_5, initialDelay: initialDelays[1],
                                   animationType: .spring(duration: 1))
             }
-            AnimatedTitleView(title: title, color: .mainSplash, initialDelay: initialDelays[0],
+            AnimatedTitleView(title: title, color: .white, initialDelay: initialDelays[0],
                               animationType: .spring(duration: 1))
         }
     }
@@ -56,10 +57,7 @@ struct AnimatedTitleView: View {
                 .renderingMode(.template)
                 .scaledToFit()
                 .frame(width: 150, height: 180)
-                .foregroundStyle(color)
-                .opacity(show ? 1 : 0)
-                .offset(y: show ? -30 : 30)
-                .animation(animationType.delay(initialDelay), value: show)
+                .foregroundStyle(.white)
                 .padding(.top, 80)
             Spacer().frame(height: 150)
             HStack(spacing: 0) {
@@ -74,6 +72,8 @@ struct AnimatedTitleView: View {
             }
             .scaleEffect(scall ? 1 : 1.2)
         }
+        
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onAppear {
             show.toggle()
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.8) {
