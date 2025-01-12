@@ -12,6 +12,7 @@
 		B5DD90E42D2CDF88009501C7 /* InputMask in Frameworks */ = {isa = PBXBuildFile; productRef = B5DD90E32D2CDF88009501C7 /* InputMask */; };
 		B5DD90E72D2D2BC6009501C7 /* MaskedTextFieldSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = B5DD90E62D2D2BC6009501C7 /* MaskedTextFieldSwiftUI */; };
 		B5DD90EA2D2D4B2E009501C7 /* iPhoneNumberField in Frameworks */ = {isa = PBXBuildFile; productRef = B5DD90E92D2D4B2E009501C7 /* iPhoneNumberField */; };
+		B5DD90EE2D342541009501C7 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = B5DD90ED2D34253C009501C7 /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +36,7 @@
 		B531E87E2D1EFC51001CF0DD /* shd.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shd.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B531E8902D1EFC52001CF0DD /* shdTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = shdTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B531E89A2D1EFC52001CF0DD /* shdUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = shdUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B5DD90ED2D34253C009501C7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -108,6 +110,7 @@
 		B531E8752D1EFC51001CF0DD = {
 			isa = PBXGroup;
 			children = (
+				B5DD90ED2D34253C009501C7 /* README.md */,
 				B531E8802D1EFC51001CF0DD /* shd */,
 				B531E8932D1EFC52001CF0DD /* shdTests */,
 				B531E89D2D1EFC52001CF0DD /* shdUITests */,
@@ -258,6 +261,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B5DD90EE2D342541009501C7 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -13,6 +13,7 @@ struct CartView: View {
     @ObservedObject var contactsData: ContactsData
     
     @State var showBottomSheet = false
+    @State private var showClearCartAlert = false
 
     var body: some View {
         NavigationStack {
@@ -81,6 +82,25 @@ struct CartView: View {
             }
             .background(Color("DarkModeBg").ignoresSafeArea())
             .navigationTitle("Корзина")
+            .toolbar {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    if !cartData.items.isEmpty {
+                        Button(action: {
+                            showClearCartAlert = true
+                        }) {
+                            Image(systemName: "trash.fill")
+                        }
+                    }
+                }
+            }
+            .alert("Очистить корзину?", isPresented: $showClearCartAlert) {
+                Button("Отмена", role: .cancel) {}
+                Button("Очистить", role: .destructive) {
+                    cartData.clearCart()
+                }
+            } message: {
+                Text("Вы уверены, что хотите удалить все товары из корзины?")
+            }
         }
     }
 }

@@ -29,6 +29,7 @@ struct MenuItemButton: View {
             Button(action: {
                 withAnimation {
                     if cartData.items.first(where: { $0.id == item.id }) == nil {
+                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
                         var newItem = item
                         newItem.price = discountPrice
                         cartData.addToCart(newItem)
@@ -40,6 +41,7 @@ struct MenuItemButton: View {
                         HStack {
                             Button(action: {
                                 withAnimation {
+                                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
                                     cartData.removeFromCart(item)
                                 }
                             }) {
@@ -56,6 +58,7 @@ struct MenuItemButton: View {
                             Spacer()
                             Button(action: {
                                 withAnimation {
+                                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
                                     var newItem = item
                                     newItem.price = discountPrice
                                     cartData.addToCart(newItem)

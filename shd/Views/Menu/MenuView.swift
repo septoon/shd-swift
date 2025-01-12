@@ -41,17 +41,14 @@ struct MenuView: View {
 
         let filteredItems: [MenuItemDTO] = {
             if !searchText.isEmpty {
-                // Поиск по всему меню
                 return allItems.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
             } else if let selectedCategory = selectedCategory {
-                // Фильтрация по выбранной категории
                 return menuData.menuCategories[selectedCategory] ?? []
             } else {
                 return []
             }
         }()
 
-           
         var isLoading: Bool {
             menuData.isLoading || deliveryData.isLoading
         }
@@ -95,6 +92,7 @@ struct MenuView: View {
                                 HStack(spacing: 16) {
                                     ForEach(sortedCategories, id: \.self) { category in
                                         Button(action: {
+                                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
                                             selectedCategory = category
                                         }) {
                                             VStack(alignment: .leading, spacing: 8) {
@@ -111,36 +109,36 @@ struct MenuView: View {
                                                                 .resizable()
                                                                 .scaledToFill()
                                                                 .frame(width: 70, height: 70)
+                                                                .opacity(selectedCategory == category ? 1 : 0.2)
+                                                                .transition(.slide)
                                                                 .clipShape(Circle())
                                                                 .padding()
                                                         }
                                                     }
-                                                    .frame(width: 80, height: 80)
-                                                    .background(selectedCategory == category ? AppColors.main : Color("DarkModeElBg"))
+                                                    .frame(width: 80, height: 70)
                                                     .clipShape(Circle())
                                                 }
                                                 Spacer()
                                                 Text(category)
                                                     .frame(maxWidth: .infinity)
                                                     .font(.footnote).bold()
-                                                    .foregroundColor(selectedCategory == category ? Color("DarkModeIcon") : AppColors.main)
+                                                    .foregroundColor(selectedCategory == category ? Color("DarkModeText") : Color("DarkModeIcon"))
                                             }
                                             .frame(width: 80, height: 130, alignment: .top)
+                                            .shadow(
+                                                    color: selectedCategory == category ? Color("DarkModeShadow") : .clear,
+                                                    radius: selectedCategory == category ? 20 : 0,
+                                                    x: 0,
+                                                    y: selectedCategory == category ? 22 : 0
+                                                    )
+                                            .transition(.opacity.combined(with: .slide))
+                                            .animation(.easeInOut(duration: 0.1), value: selectedCategory)
                                         }
                                     }
                                 }
                                 .padding()
                             }
                             
-                            if let selectedCategory = selectedCategory,
-                                let items = menuData.menuCategories[selectedCategory] {
-                                LazyVGrid(columns: columns, spacing: 16) {
-                                    ForEach(items) { item in
-                                        MenuItemView(item: item, cartData: cartData, deliveryData: deliveryData)
-                                    }
-                                }
-                                .padding()
-                            }
                         }
                         
                         if !filteredItems.isEmpty {
@@ -151,16 +149,24 @@ struct MenuView: View {
                             }
                             .padding()
                         } else {
-                            Text("Ничего не найдено")
-                                .font(.headline)
-                                .foregroundColor(.secondary)
-                                .padding()
+                            VStack {
+                                Spacer(minLength: 200)
+                                PreLoader(animationName: "Preloader")
+                                    .frame(width: 100, height: 100)
+                                Spacer()
+                            }
+                            .background(Color("DarkModeBg")
+                                .ignoresSafeArea())
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .contentShape(Rectangle())
                         }
-                        
                     }
                 }
             }
             .background(Color("DarkModeBg"))
+            .onTapGesture {
+                hideKeyboard()
+            }
             .navigationTitle("Меню")
             .navigationBarTitleDisplayMode(.large)
             .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
@@ -173,6 +179,14 @@ struct MenuView: View {
                 await deliveryData.fetchDelivery()
             }
         }
+    }
+    private func hideKeyboard() {
+        UIApplication.shared.sendAction(
+            #selector(UIResponder.resignFirstResponder),
+            to: nil,
+            from: nil,
+            for: nil
+        )
     }
 }
 

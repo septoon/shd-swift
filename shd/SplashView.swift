@@ -44,6 +44,7 @@ struct AnimatedTitleView: View {
     @State var scall = false
     @State private var show = false
     private var delayStep = 0.1
+    private var hapticDelay: Double = 0.2
     init(title: String, color: Color, initialDelay: Double, animationType: Animation) {
         self.title = title
         self.color = color
@@ -68,6 +69,11 @@ struct AnimatedTitleView: View {
                         .offset(y: show ? -30 : 30)
                         .animation(animationType.delay(Double(index) * delayStep + initialDelay), value: show)
                         .foregroundStyle(color)
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + Double(index) * delayStep + initialDelay) {
+                                UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+                            }
+                        }
                 }
             }
             .scaleEffect(scall ? 1 : 1.2)
@@ -78,7 +84,15 @@ struct AnimatedTitleView: View {
             show.toggle()
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.8) {
                 withAnimation {
-                    scall.toggle()                }
+                    scall.toggle()
+                }
+            }
+        }
+        .onChange(of: scall) { newValue in
+            if newValue {
+                DispatchQueue.main.asyncAfter(deadline: .now() + hapticDelay) {
+                    UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+                }
             }
         }
     }
