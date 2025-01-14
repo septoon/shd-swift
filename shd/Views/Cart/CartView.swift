@@ -88,7 +88,9 @@ struct CartView: View {
                         Button(action: {
                             showClearCartAlert = true
                         }) {
-                            Image(systemName: "trash.fill")
+                            Image(systemName: "trash.slash.fill")
+                                .foregroundColor(.gray)
+                                .font(.system(size: 16, weight: .bold))
                         }
                     }
                 }
