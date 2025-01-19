@@ -25,7 +25,13 @@
 	</dict>
 	<key>TELEGRAM_BOT_TOKEN</key>
 	<string>7275423419:AAGDxY6uqtmMxO3xFzKbMKRhxyfr9W9RjHY</string>
+    <key>CFBundleLocalizations</key>
+    <array>
+        <string>ru</string>
+    </array>
     <key>CFBundleDevelopmentRegion</key>
     <string>ru</string>
+    <key>NSPrivacyUsageDescription</key>
+    <string>Мы используем ваши данные для авторизации</string>
 </dict>
 </plist>

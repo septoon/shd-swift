@@ -18,8 +18,7 @@ struct LottieView: UIViewRepresentable {
 
         animationView.frame = view.bounds
         animationView.contentMode = .scaleAspectFit
-        animationView.loopMode = .loop // Повторяющаяся анимация
-        print("animation view initialized")
+        animationView.loopMode = .loop
         animationView.play()
 
         view.addSubview(animationView)

@@ -48,13 +48,11 @@ struct ContactsView: View {
                                 )
                                 Spacer()
                             }
-                            .background(
-                                RoundedRectangle(cornerRadius: 16)
-                                    .fill(Color("DarkModeBg"))
-                            )
+                            .background(.ultraThinMaterial)
+                            .cornerRadius(16)
                             .padding()
                             .frame(maxHeight: UIScreen.main.bounds.height * 0.25)
-                            .shadow(radius: 10)
+                            .shadow(radius: 8)
                         }
                     }
                     Spacer(minLength: 30)

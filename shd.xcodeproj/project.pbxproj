@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		B52338B72D2188FA0010D885 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = B52338B62D2188FA0010D885 /* Lottie */; };
+		B537F9E22D3C52D20014C48B /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B537F9E02D3C52BD0014C48B /* AuthenticationServices.framework */; };
 		B5DD90C92D2AB020009501C7 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = B5DD90C82D2AB020009501C7 /* Kingfisher */; };
 		B5DD90E42D2CDF88009501C7 /* InputMask in Frameworks */ = {isa = PBXBuildFile; productRef = B5DD90E32D2CDF88009501C7 /* InputMask */; };
 		B5DD90E72D2D2BC6009501C7 /* MaskedTextFieldSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = B5DD90E62D2D2BC6009501C7 /* MaskedTextFieldSwiftUI */; };
@@ -36,6 +37,7 @@
 		B531E87E2D1EFC51001CF0DD /* shd.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shd.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B531E8902D1EFC52001CF0DD /* shdTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = shdTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B531E89A2D1EFC52001CF0DD /* shdUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = shdUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B537F9E02D3C52BD0014C48B /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
 		B5DD90ED2D34253C009501C7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -75,6 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B537F9E22D3C52D20014C48B /* AuthenticationServices.framework in Frameworks */,
 				B5DD90E42D2CDF88009501C7 /* InputMask in Frameworks */,
 				B5DD90C92D2AB020009501C7 /* Kingfisher in Frameworks */,
 				B52338B72D2188FA0010D885 /* Lottie in Frameworks */,
@@ -103,6 +106,7 @@
 		B52338B52D2188FA0010D885 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B537F9E02D3C52BD0014C48B /* AuthenticationServices.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

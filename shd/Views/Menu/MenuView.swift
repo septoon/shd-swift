@@ -48,6 +48,13 @@ struct MenuView: View {
                 return []
             }
         }()
+        
+        var suggestions: [String] {
+            let allItems = menuData.menuCategories.values.flatMap { $0 }
+            return allItems
+                .filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+                .map { $0.name }
+        }
 
         var isLoading: Bool {
             menuData.isLoading || deliveryData.isLoading
@@ -88,56 +95,7 @@ struct MenuView: View {
                     } else {
 
                         if searchText.isEmpty {
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 16) {
-                                    ForEach(sortedCategories, id: \.self) { category in
-                                        Button(action: {
-                                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                                            selectedCategory = category
-                                        }) {
-                                            VStack(alignment: .leading, spacing: 8) {
-                                                ZStack {
-                                                    VStack {
-                                                        if let firstItem = menuData.menuCategories[category]?.first, let imageUrl = firstItem.image, let url = URL(string: imageUrl) {
-                                                            KFImage(url)
-                                                                .placeholder {
-                                                                    ProgressView()
-                                                                        .frame(width: 70, height: 70)
-                                                                        .background(Color("DarkModeElBg"))
-                                                                        .clipShape(Circle())
-                                                                }
-                                                                .resizable()
-                                                                .scaledToFill()
-                                                                .frame(width: 70, height: 70)
-                                                                .opacity(selectedCategory == category ? 1 : 0.2)
-                                                                .transition(.slide)
-                                                                .clipShape(Circle())
-                                                                .padding()
-                                                        }
-                                                    }
-                                                    .frame(width: 80, height: 70)
-                                                    .clipShape(Circle())
-                                                }
-                                                Spacer()
-                                                Text(category)
-                                                    .frame(maxWidth: .infinity)
-                                                    .font(.footnote).bold()
-                                                    .foregroundColor(selectedCategory == category ? Color("DarkModeText") : Color("DarkModeIcon"))
-                                            }
-                                            .frame(width: 80, height: 130, alignment: .top)
-                                            .shadow(
-                                                    color: selectedCategory == category ? Color("DarkModeShadow") : .clear,
-                                                    radius: selectedCategory == category ? 20 : 0,
-                                                    x: 0,
-                                                    y: selectedCategory == category ? 22 : 0
-                                                    )
-                                            .transition(.opacity.combined(with: .slide))
-                                            .animation(.easeInOut(duration: 0.1), value: selectedCategory)
-                                        }
-                                    }
-                                }
-                                .padding()
-                            }
+                            MenuCategoriesView(sortedCategories: sortedCategories, selectedCategory: $selectedCategory, menuData: menuData)
                             
                         }
                         
@@ -148,6 +106,7 @@ struct MenuView: View {
                                 }
                             }
                             .padding()
+                            
                         } else {
                             VStack {
                                 Spacer(minLength: 200)
@@ -163,14 +122,45 @@ struct MenuView: View {
                     }
                 }
             }
-            .background(Color("DarkModeBg"))
             .onTapGesture {
                 hideKeyboard()
             }
-            .navigationTitle("Меню")
-            .navigationBarTitleDisplayMode(.large)
-            .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
-            .environment(\.locale, Locale(identifier: "ru"))
+            .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .automatic), prompt: "Поиск по меню") {
+                List {
+                    Section {
+                        ForEach(suggestions, id: \.self) { suggestion in
+                            Text(suggestion).searchCompletion(suggestion)
+                                .foregroundColor(Color("DarkModeText"))
+                                
+                        }
+                    }
+                }
+                .scrollContentBackground(.hidden)
+                    
+            }
+            .background(Color("DarkModeBg").edgesIgnoringSafeArea(.all))
+            .toolbar {
+                ToolbarItemGroup(placement: .navigationBarLeading) {
+                    Image("titleLogo1line")
+                        .resizable()
+                        .renderingMode(.template)
+                        .scaledToFit()
+                        .frame(height: 16)
+                        .foregroundStyle(Color("DarkModeText"))
+                        .padding(.bottom, 10)
+                }
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    NavigationLink(destination: ProfileView()) {
+                        Image(systemName: "person.crop.circle.fill")
+                            .resizable()
+                            .renderingMode(.template)
+                            .scaledToFit()
+                            .frame(height: 26)
+                            .foregroundStyle(.gray)
+                            .padding(.bottom, 10)
+                    }
+                }
+            }
             .refreshable {
                 await menuData.fetchMenuItems()
             }
